@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.AddDena"></activity>
+        <activity android:name=".activity.DailyExpense"></activity>
+        <activity android:name=".activity.AddDena" />
         <activity android:name=".activity.AddLena" />
         <activity android:name=".activity.Profile" />
         <activity android:name=".activity.Language" />

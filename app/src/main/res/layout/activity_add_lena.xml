@@ -114,7 +114,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/add_dena_description" />
 
             <Button
-                android:id="@+id/add_dena_time_btn"
+                android:id="@+id/daily_expanse_time"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
                 android:paddingStart="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/add_dena_time_btn" />
+                app:layout_constraintTop_toBottomOf="@+id/daily_expanse_time" />
 
             <EditText
                 android:id="@+id/add_dena_phoneno"
