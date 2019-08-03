@@ -46,7 +46,7 @@
 
 
         <Button
-            android:id="@+id/textView6"
+            android:id="@+id/language_hindi_btn"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
@@ -57,7 +57,7 @@
             android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/textView7"
+            android:id="@+id/language_englis_btn"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
@@ -68,7 +68,7 @@
             android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/textView8"
+            android:id="@+id/language_marathi_btn"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
@@ -79,7 +79,7 @@
             android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/textView9"
+            android:id="@+id/language_gujrati_btn"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
