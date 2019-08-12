@@ -29,6 +29,8 @@ public class LenaFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_lena, container, false);
 
 
+
+
     }
 
 }
