@@ -114,7 +114,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/add_dena_description" />
 
             <Button
-                android:id="@+id/daily_expanse_time"
+                android:id="@+id/add_lena_date_btn"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
                 android:paddingStart="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/daily_expanse_time" />
+                app:layout_constraintTop_toBottomOf="@+id/add_lena_date_btn" />
 
             <EditText
                 android:id="@+id/add_dena_phoneno"
@@ -153,8 +153,8 @@
                 android:layout_marginTop="18dp"
                 android:background="@drawable/editdesign"
                 android:ems="10"
-                android:hint="Phone"
-                android:inputType="textPersonName"
+                android:hint="Phone (optional)"
+                android:inputType="phone"
                 android:paddingStart="10dp"
                 app:layout_constraintEnd_toEndOf="@+id/add_dena_amount"
                 app:layout_constraintStart_toStartOf="@+id/add_dena_amount"

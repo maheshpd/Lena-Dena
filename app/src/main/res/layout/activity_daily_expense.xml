@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar4" />
 
     <Button
-        android:id="@+id/daily_expanse_time"
+        android:id="@+id/add_lena_date_btn"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -69,8 +69,8 @@
         android:textColor="@android:color/black"
         android:textSize="17sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/daily_expanse_time"
-        app:layout_constraintTop_toBottomOf="@+id/daily_expanse_time" />
+        app:layout_constraintStart_toStartOf="@+id/add_lena_date_btn"
+        app:layout_constraintTop_toBottomOf="@+id/add_lena_date_btn" />
 
     <EditText
         android:id="@+id/daily_expanse_description"
