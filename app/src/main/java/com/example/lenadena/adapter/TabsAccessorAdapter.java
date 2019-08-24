@@ -23,11 +23,12 @@ public class TabsAccessorAdapter extends FragmentPagerAdapter {
                 ALLFragment allFragment = new ALLFragment();
                 return allFragment;
             case 1:
-                LenaFragment lenaFragment = new LenaFragment();
-                return lenaFragment;
-            case 2:
                 DenaFragement denaFragement = new DenaFragement();
                 return denaFragement;
+
+            case 2:
+                LenaFragment lenaFragment = new LenaFragment();
+                return lenaFragment;
             case 3:
                 DailyExpanseFragment dailyExpanseFragment = new DailyExpanseFragment();
                 return dailyExpanseFragment;
