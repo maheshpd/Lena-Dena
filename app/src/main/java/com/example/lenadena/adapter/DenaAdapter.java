@@ -57,8 +57,6 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
         String createdDateString = dena.getCreateDate();
         String expireDateString = dena.getTime();
 
-//        int remaingDate = getCountOfDays(createdDateString,expireDateString);
-//        holder.dateRemaning.setText(remaingDate);
 
         countDownStart(holder, expireDateString);
     }
