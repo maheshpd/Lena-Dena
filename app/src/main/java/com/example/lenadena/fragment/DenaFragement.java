@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,7 @@ import com.example.lenadena.R;
 import com.example.lenadena.adapter.DenaAdapter;
 import com.example.lenadena.model.Dena;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,13 +28,18 @@ public class DenaFragement extends Fragment {
 
     //Widget
     RecyclerView denaRv;
-
+    LinearLayout givemoney;
 
     List<Dena> denalist;
     public DenaFragement() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        new getDataValue().execute();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,8 +47,17 @@ public class DenaFragement extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dena_fragement, container, false);
         denaRv = view.findViewById(R.id.denaRv);
-
+        givemoney = view.findViewById(R.id.no_give_money);
+        denalist = new ArrayList<>();
         new getDataValue().execute();
+
+        if (denalist.size() == 0) {
+            givemoney.setVisibility(View.VISIBLE);
+        } else {
+            denaRv.setVisibility(View.VISIBLE);
+            givemoney.setVisibility(View.GONE);
+        }
+
 
         return view;
     }
@@ -59,6 +76,8 @@ public class DenaFragement extends Fragment {
                     .getDenaDataBase()
                     .denaDao()
                     .getAllDena();
+
+
             return denalist;
         }
 
@@ -72,4 +91,6 @@ public class DenaFragement extends Fragment {
             adapter.notifyDataSetChanged();
         }
     }
+
+
 }

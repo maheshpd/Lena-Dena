@@ -48,12 +48,12 @@ public class DailyExpanseFragment extends Fragment {
         startDate.add(Calendar.MONTH, 0);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.add(Calendar.DATE, 2); //2 day left
+        endDate.add(Calendar.YEAR, 0); //2 day left
 
         horizontalCalendarView = view.findViewById(R.id.calanderView);
         HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(view, R.id.calanderView)
                 .range(startDate, endDate)
-                .datesNumberOnScreen(4)
+                .datesNumberOnScreen(7)
                 .mode(HorizontalCalendar.Mode.DAYS)
                 .defaultSelectedDate(startDate)
                 .build();

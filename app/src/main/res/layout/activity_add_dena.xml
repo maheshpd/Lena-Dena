@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="@+id/toolbar4"
         app:layout_constraintTop_toTopOf="@+id/toolbar4" />
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,76 +43,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                android:text="For Whom give"
-                android:textColor="@android:color/black"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/add_dena_name"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                android:background="@drawable/editdesign"
-                android:ems="10"
-                android:hint="Name"
-                android:inputType="textPersonName"
-                android:paddingStart="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textView15"
-                app:layout_constraintTop_toBottomOf="@+id/textView15" />
-
-            <TextView
-                android:id="@+id/textView16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                android:text="For What"
-                android:textColor="@android:color/black"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/add_dena_name" />
-
-            <EditText
-                android:id="@+id/add_dena_description"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                android:background="@drawable/editdesign"
-                android:ems="10"
-                android:hint="Description"
-                android:inputType="textPersonName"
-                android:paddingStart="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textView16"
-                app:layout_constraintTop_toBottomOf="@+id/textView16" />
-
-            <TextView
-                android:id="@+id/textView17"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Time When give"
-                android:textColor="@android:color/black"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/add_dena_description"
-                app:layout_constraintTop_toBottomOf="@+id/add_dena_description" />
-
             <Button
-                android:id="@+id/add_lena_date_btn"
+                android:id="@+id/add_dena_date_btn"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -127,36 +59,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView17"
                 app:layout_constraintTop_toBottomOf="@+id/textView17" />
-
-            <EditText
-                android:id="@+id/add_dena_amount"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
-                android:background="@drawable/editdesign"
-                android:ems="10"
-                android:hint="Amount"
-                android:inputType="number|textPersonName"
-                android:paddingStart="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/add_lena_date_btn" />
-
-            <EditText
-                android:id="@+id/add_dena_phoneno"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/editdesign"
-                android:ems="10"
-                android:hint="Phone (optional)"
-                android:inputType="phone"
-                android:paddingStart="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/add_dena_amount"
-                app:layout_constraintStart_toStartOf="@+id/add_dena_amount"
-                app:layout_constraintTop_toBottomOf="@+id/add_dena_amount" />
 
             <Button
                 android:id="@+id/add_dena_save_btn"
@@ -174,8 +76,106 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/add_dena_phoneno" />
 
+            <EditText
+                android:id="@+id/add_dena_name"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/editdesign"
+                android:ems="10"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                android:paddingStart="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textView15"
+                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+            <EditText
+                android:id="@+id/add_dena_amount"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/editdesign"
+                android:ems="10"
+                android:hint="Amount"
+                android:inputType="number|textPersonName"
+                android:paddingStart="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_dena_date_btn" />
+
+            <EditText
+                android:id="@+id/add_dena_phoneno"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/editdesign"
+                android:ems="10"
+                android:hint="Phone (optional)"
+                android:inputType="phone"
+                android:paddingStart="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/add_dena_amount"
+                app:layout_constraintStart_toStartOf="@+id/add_dena_amount"
+                app:layout_constraintTop_toBottomOf="@+id/add_dena_amount" />
+
+            <EditText
+                android:id="@+id/add_dena_description"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/editdesign"
+                android:ems="10"
+                android:hint="Description"
+                android:inputType="textPersonName"
+                android:paddingStart="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textView16"
+                app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:text="For Whom give"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Time When give"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/add_dena_description"
+                app:layout_constraintTop_toBottomOf="@+id/add_dena_description" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:text="For What"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_dena_name" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

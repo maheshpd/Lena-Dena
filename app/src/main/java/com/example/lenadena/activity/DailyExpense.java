@@ -35,6 +35,7 @@ public class DailyExpense extends AppCompatActivity {
     }
 
     private void initWidget() {
-        add_lena_date_btn = findViewById(R.id.)
+        add_lena_date_btn = findViewById(R.id.add_lena_date_btn);
+        add_lena_date_btn.setText(screateDate);
     }
 }

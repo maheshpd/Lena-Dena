@@ -43,7 +43,7 @@ public class AddDena extends AppCompatActivity implements View.OnClickListener {
     private void initWidget() {
         edtName = findViewById(R.id.add_dena_name);
         edtDesc = findViewById(R.id.add_dena_description);
-        add_dena_date_btn = findViewById(R.id.add_lena_date_btn);
+        add_dena_date_btn = findViewById(R.id.add_dena_date_btn);
         edtAmt = findViewById(R.id.add_dena_amount);
         edtPhone = findViewById(R.id.add_dena_phoneno);
         saveBtn = findViewById(R.id.add_dena_save_btn);
@@ -62,7 +62,7 @@ public class AddDena extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
 
-        if (id == R.id.add_lena_date_btn) {
+        if (id == R.id.add_dena_date_btn) {
             //Get current Date
             final Calendar c = Calendar.getInstance();
             mYear = c.get(Calendar.YEAR);

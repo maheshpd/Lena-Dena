@@ -6,22 +6,22 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.lenadena.model.Dena;
+import com.example.lenadena.model.Lena;
 
 import java.util.List;
 
 @Dao
-public interface DenaDao {
+public interface LenaDao {
 
-    @Query("SELECT * FROM Dena ORDER BY createDate ASC")
-    List<Dena> getAllDena();
+    @Query("SELECT * FROM Lena")
+    List<Lena> getAllLena();
 
     @Insert
-    void insert(Dena dena);
+    void insert(Lena lena);
 
     @Delete
-    void delete(Dena dena);
+    void delete(Lena lena);
 
     @Update
-    void update(Dena dena);
+    void update(Lena lena);
 }
