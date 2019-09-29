@@ -1,13 +1,22 @@
 package com.example.lenadena.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +24,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.lenadena.Client.DenaDatabaseClient;
 import com.example.lenadena.R;
 import com.example.lenadena.model.Dena;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,10 +37,13 @@ import java.util.Date;
 
 public class AddDena extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int PICK_CONTACT = 1121;
+
     //Widget
     Button add_dena_date_btn, saveBtn;
     private int mYear, mMonth, mDay, mHour, mMinute;
     EditText edtName, edtDesc, edtAmt, edtPhone;
+    CheckBox remindMe_cbk;
 
     //String
     String sname, sdesc, stime, samt, sphone, stype, screateDate;
@@ -47,6 +65,7 @@ public class AddDena extends AppCompatActivity implements View.OnClickListener {
         edtAmt = findViewById(R.id.add_dena_amount);
         edtPhone = findViewById(R.id.add_dena_phoneno);
         saveBtn = findViewById(R.id.add_dena_save_btn);
+        remindMe_cbk = findViewById(R.id.reminme_cbk);
 
         //Current Date
         date = Calendar.getInstance().getTime();
@@ -56,6 +75,44 @@ public class AddDena extends AppCompatActivity implements View.OnClickListener {
 
         add_dena_date_btn.setOnClickListener(this);
         saveBtn.setOnClickListener(this);
+
+        ImageButton contactBtn = findViewById(R.id.contact_btn);
+        contactBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dexter.withActivity(AddDena.this)
+                        .withPermission(Manifest.permission.READ_CONTACTS).withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+
+                        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                        startActivityForResult(intent, PICK_CONTACT);
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                    }
+                }).check();
+            }
+        });
+
+        remindMe_cbk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean checked = ((CheckBox) view).isChecked();
+                if (checked) {
+                    Dexter.withActivity, red
+                } else if (checked) {
+
+                }
+            }
+        });
     }
 
     @Override
@@ -127,6 +184,41 @@ public class AddDena extends AppCompatActivity implements View.OnClickListener {
             finish();
             super.onPostExecute(aVoid);
 
+        }
+    }
+
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        switch (reqCode) {
+            case (PICK_CONTACT):
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri contactData = data.getData();
+                    Cursor c = managedQuery(contactData, null, null, null, null);
+                    if (c.moveToFirst()) {
+                        String id = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                        String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                        try {
+                            if (hasPhone.equalsIgnoreCase("1")) {
+                                Cursor phones = getContentResolver().query(
+                                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,
+                                        null, null);
+                                phones.moveToFirst();
+                                String cNumber = phones.getString(phones.getColumnIndex("data1"));
+                                System.out.println("number is:" + cNumber);
+                                Log.d("phone no: ", cNumber);
+                                edtPhone.setText(cNumber);
+                            }
+                            String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+//                            txtname.setText("Name is: "+name);
+                        } catch (Exception ex) {
+                            ex.getMessage();
+                        }
+                    }
+                }
+                break;
+
+            //Comment
         }
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 @Dao
 public interface DenaDao {
 
-    @Query("SELECT * FROM Dena ORDER BY createDate ASC")
+    @Query("SELECT * FROM Dena")
     List<Dena> getAllDena();
 
     @Insert

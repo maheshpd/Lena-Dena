@@ -22,20 +22,24 @@ import java.util.Random;
 
 public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHolder> {
 
-    Context context;
-    List<Dena> list;
+    private Context context;
+    private List<Dena> list;
     private Handler handler;
     private Runnable runnable;
+    private OnDenaItemClick onDenaItemClick;
+    private LayoutInflater layoutInflater;
 
-    public DenaAdapter(Context context, List<Dena> list) {
+    public DenaAdapter(Context context, List<Dena> list, OnDenaItemClick onDenaItemClick) {
+        layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.list = list;
+        this.onDenaItemClick = onDenaItemClick;
     }
 
     @NonNull
     @Override
     public MyDenaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+        View view = layoutInflater.inflate(R.layout.item, parent, false);
         return new MyDenaViewHolder(view);
     }
 
@@ -59,6 +63,7 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
 
 
         countDownStart(holder, expireDateString);
+
     }
 
 
@@ -69,8 +74,7 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
             public void run() {
                 handler.postDelayed(this, 1000);
                 try {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat(
-                            "dd/MM/yyyy");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     // Please here set your event date//YYYY-MM-DD
                     Date futureDate = dateFormat.parse(expiredate);
                     Date currentDate = new Date();
@@ -103,13 +107,12 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
     }
 
 
-
     @Override
     public int getItemCount() {
         return list.size();
     }
 
-    public class MyDenaViewHolder extends RecyclerView.ViewHolder {
+    public class MyDenaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView type, dateRemaning, name, desc, phone, amt, firstChar;
 
@@ -123,6 +126,12 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
             phone = itemView.findViewById(R.id.phoneno);
             amt = itemView.findViewById(R.id.amt);
             firstChar = itemView.findViewById(R.id.firstChar);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onDenaItemClick.onDenaItemClick(getAdapterPosition());
         }
     }
 
@@ -154,5 +163,6 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
 //
 //        return (int) (dayCount);
 //    }
+
 
 }

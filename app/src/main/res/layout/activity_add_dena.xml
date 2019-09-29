@@ -41,7 +41,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/add_dena_date_btn"
@@ -73,6 +73,17 @@
                 android:textColor="@android:color/background_light"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.567"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reminme_cbk" />
+
+            <CheckBox
+                android:id="@+id/reminme_cbk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:text="Remind Me"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/add_dena_phoneno" />
 
@@ -112,12 +123,13 @@
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="18dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/editdesign"
                 android:ems="10"
                 android:hint="Phone (optional)"
                 android:inputType="phone"
                 android:paddingStart="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/add_dena_amount"
+                app:layout_constraintEnd_toStartOf="@+id/contact_btn"
                 app:layout_constraintStart_toStartOf="@+id/add_dena_amount"
                 app:layout_constraintTop_toBottomOf="@+id/add_dena_amount" />
 
@@ -173,6 +185,16 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/add_dena_name" />
+
+            <ImageButton
+                android:id="@+id/contact_btn"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/add_dena_phoneno"
+                app:layout_constraintEnd_toEndOf="@+id/add_dena_amount"
+                app:layout_constraintTop_toTopOf="@+id/add_dena_phoneno"
+                app:srcCompat="@drawable/ic_contact_phone_black_24dp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
