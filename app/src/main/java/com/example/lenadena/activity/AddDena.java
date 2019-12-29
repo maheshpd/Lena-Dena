@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lenadena.Client.DenaDatabaseClient;
+import com.example.lenadena.Common;
 import com.example.lenadena.R;
 import com.example.lenadena.model.Dena;
 import com.karumi.dexter.Dexter;
@@ -32,8 +33,10 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class AddDena extends AppCompatActivity implements View.OnClickListener {
 
@@ -48,7 +51,11 @@ public class AddDena extends AppCompatActivity implements View.OnClickListener {
     //String
     String sname, sdesc, stime, samt, sphone, stype, screateDate;
 
+    List<Dena> denalist;
+
     Date date;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,170 +63,242 @@ public class AddDena extends AppCompatActivity implements View.OnClickListener {
 
         //initWidget
         initWidget();
-    }
 
-    private void initWidget() {
-        edtName = findViewById(R.id.add_dena_name);
-        edtDesc = findViewById(R.id.add_dena_description);
-        add_dena_date_btn = findViewById(R.id.add_dena_date_btn);
-        edtAmt = findViewById(R.id.add_dena_amount);
-        edtPhone = findViewById(R.id.add_dena_phoneno);
-        saveBtn = findViewById(R.id.add_dena_save_btn);
-        remindMe_cbk = findViewById(R.id.reminme_cbk);
-
-        //Current Date
-        date = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        screateDate = df.format(date);
+        denalist = new ArrayList<>();
+//        new getDataValue().execute();
 
 
-        add_dena_date_btn.setOnClickListener(this);
-        saveBtn.setOnClickListener(this);
+        if (Common.posFromDena == true) {
+//            new getDataValue().execute();
 
-        ImageButton contactBtn = findViewById(R.id.contact_btn);
-        contactBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Dexter.withActivity(AddDena.this)
-                        .withPermission(Manifest.permission.READ_CONTACTS).withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response) {
+            final int pos = Common.position;
 
-                        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                        startActivityForResult(intent, PICK_CONTACT);
-                    }
+            sname = Common.denalist.get(Common.position).getName();
+            sdesc = Common.denalist.get(pos).getDescription();
+            stime = Common.denalist.get(Common.position).getTime();
+            samt = Common.denalist.get(Common.position).getAmount();
+            sphone = Common.denalist.get(Common.position).getPhone();
 
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response) {
 
-                    }
+            edtName.setText(sname);
+            edtDesc.setText(sdesc);
+            add_dena_date_btn.setText(stime);
+            edtAmt.setText(samt);
+            edtPhone.setText(sphone);
+            saveBtn.setText("Update");
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+            saveBtn.setOnClickListener(new
+            class getDataValue extends AsyncTask<Void, Void, List<Dena>> {
 
-                    }
-                }).check();
-            }
-        });
 
-        remindMe_cbk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean checked = ((CheckBox) view).isChecked();
-                if (checked) {
-                    Dexter.withActivity, red
-                } else if (checked) {
-
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onClick(View view) {
-        int id = view.getId();
-
-        if (id == R.id.add_dena_date_btn) {
-            //Get current Date
-            final Calendar c = Calendar.getInstance();
-            mYear = c.get(Calendar.YEAR);
-            mMonth = c.get(Calendar.MONTH);
-            mDay = c.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                 @Override
-                public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                    add_dena_date_btn.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                protected List<Dena> doInBackground(Void... voids) {
+                    denalist = DenaDatabaseClient.getInstance(AddDena.this)
+                            .getDenaDataBase()
+                            .denaDao()
+                            .getAllDena();
+                    return denalist;
                 }
-            }, mYear, mMonth, mDay);
-            datePickerDialog.show();
 
-        } else if (id == R.id.add_dena_save_btn) {
-            sname = edtName.getText().toString().trim();
-            sdesc = edtDesc.getText().toString().trim();
-            samt = edtAmt.getText().toString().trim();
-            sphone = edtPhone.getText().toString().trim();
-            stime = add_dena_date_btn.getText().toString();
+                @Override
+                protected void onPostExecute(List<Dena> denas) {
+                    super.onPostExecute(denas);
 
+                    if (denas != null && denas.size() > 0) {
+//                givemoney.setVisibility(View.GONE);
 
-            if (TextUtils.isEmpty(sname)) {
-                Toast.makeText(this, "Enter Dena's name ", Toast.LENGTH_SHORT).show();
-                edtName.requestFocus();
-            } else if (TextUtils.isEmpty(sdesc)) {
-                Toast.makeText(this, "Enter Description", Toast.LENGTH_SHORT).show();
-            } else if (TextUtils.isEmpty(samt)) {
-                Toast.makeText(this, "Enter amount", Toast.LENGTH_SHORT).show();
-            } else {
-                new saveDena().execute();
-            }
-
-        }
-    }
-
-    class saveDena extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-
-            Dena dena = new Dena();
-            dena.setName(sname);
-            dena.setDescription(sdesc);
-            dena.setAmount(samt);
-            dena.setType("Dena");
-            dena.setTime(stime);
-            dena.setCreateDate(screateDate);
-            dena.setPhone(sphone);
-
-            //Add To Database
-            DenaDatabaseClient.getInstance(getApplicationContext()).getDenaDataBase().denaDao().insert(dena);
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            add_dena_date_btn.setEnabled(true);
-            finish();
-            super.onPostExecute(aVoid);
-
-        }
-    }
-
-    public void onActivityResult(int reqCode, int resultCode, Intent data) {
-        super.onActivityResult(reqCode, resultCode, data);
-        switch (reqCode) {
-            case (PICK_CONTACT):
-                if (resultCode == Activity.RESULT_OK) {
-                    Uri contactData = data.getData();
-                    Cursor c = managedQuery(contactData, null, null, null, null);
-                    if (c.moveToFirst()) {
-                        String id = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
-                        String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-                        try {
-                            if (hasPhone.equalsIgnoreCase("1")) {
-                                Cursor phones = getContentResolver().query(
-                                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,
-                                        null, null);
-                                phones.moveToFirst();
-                                String cNumber = phones.getString(phones.getColumnIndex("data1"));
-                                System.out.println("number is:" + cNumber);
-                                Log.d("phone no: ", cNumber);
-                                edtPhone.setText(cNumber);
-                            }
-                            String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-//                            txtname.setText("Name is: "+name);
-                        } catch (Exception ex) {
-                            ex.getMessage();
-                        }
                     }
                 }
-                break;
+            }
 
-            //Comment
-        }
-    }
+            private void initWidget() {
+                edtName = findViewById(R.id.add_dena_name);
+                edtDesc = findViewById(R.id.add_dena_description);
+                add_dena_date_btn = findViewById(R.id.add_dena_date_btn);
+                edtAmt = findViewById(R.id.add_dena_amount);
+                edtPhone = findViewById(R.id.add_dena_phoneno);
+                saveBtn = findViewById(R.id.add_dena_save_btn);
+                remindMe_cbk = findViewById(R.id.reminme_cbk);
 
+                //Current Date
+                date = Calendar.getInstance().getTime();
+                SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                screateDate = df.format(date);
+
+
+                add_dena_date_btn.setOnClickListener(this);
+                saveBtn.setOnClickListener(this);
+
+                ImageButton contactBtn = findViewById(R.id.contact_btn);
+                contactBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Dexter.withActivity(AddDena.this)
+                                .withPermission(Manifest.permission.READ_CONTACTS).withListener(new PermissionListener() {
+                            @Override
+                            public void onPermissionGranted(PermissionGrantedResponse response) {
+
+                                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                                startActivityForResult(intent, PICK_CONTACT);
+                            }
+
+                            @Override
+                            public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                            }
+
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                            }
+                        }).check();
+                    }
+                });
+
+                remindMe_cbk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                DenaDatabaseClient.getInstance(AddDena.this)
+                                        .getDenaDataBase()
+                                        .denaDao()
+                                        .delete(Common.denalist.get(pos));
+                                Common.denalist.remove(pos);
+                            }
+                        });
+
+                    }
+
+
+                });
+            }
+
+            @Override
+            public void onClick(View view) {
+                int id = view.getId();
+
+                if (id == R.id.add_dena_date_btn) {
+                    //Get current Date
+                    final Calendar c = Calendar.getInstance();
+                    mYear = c.get(Calendar.YEAR);
+                    mMonth = c.get(Calendar.MONTH);
+                    mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                            add_dena_date_btn.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                        }
+                    }, mYear, mMonth, mDay);
+                    datePickerDialog.show();
+
+                } else if (id == R.id.add_dena_save_btn) {
+                    sname = edtName.getText().toString().trim();
+                    sdesc = edtDesc.getText().toString().trim();
+                    samt = edtAmt.getText().toString().trim();
+                    sphone = edtPhone.getText().toString().trim();
+                    stime = add_dena_date_btn.getText().toString();
+
+
+                    if (TextUtils.isEmpty(sname)) {
+                        Toast.makeText(this, "Enter Dena's name ", Toast.LENGTH_SHORT).show();
+                        edtName.requestFocus();
+                    } else if (TextUtils.isEmpty(sdesc)) {
+                        Toast.makeText(this, "Enter Description", Toast.LENGTH_SHORT).show();
+                    } else if (TextUtils.isEmpty(samt)) {
+                        Toast.makeText(this, "Enter amount", Toast.LENGTH_SHORT).show();
+                    } else {
+                        new saveDena().execute();
+                    }
+
+                }
+            }
+
+            class saveDena extends AsyncTask<Void, Void, Void> {
+
+                @Override
+                protected Void doInBackground(Void... voids) {
+
+
+                    Dena dena = new Dena();
+                    dena.setName(sname);
+                    dena.setDescription(sdesc);
+                    dena.setAmount(samt);
+                    dena.setType("Dena");
+                    dena.setTime(stime);
+                    dena.setCreateDate(screateDate);
+                    dena.setPhone(sphone);
+
+                    //Add To Database
+                    DenaDatabaseClient.getInstance(getApplicationContext()).getDenaDataBase().denaDao().insert(dena);
+
+
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    add_dena_date_btn.setEnabled(true);
+                    finish();
+                    super.onPostExecute(aVoid);
+
+                }
+            }
+
+            public void onActivityResult(int reqCode, int resultCode, Intent data) {
+                super.onActivityResult(reqCode, resultCode, data);
+                switch (reqCode) {
+                    case (PICK_CONTACT):
+                        if (resultCode == Activity.RESULT_OK) {
+                            Uri contactData = data.getData();
+                            Cursor c = managedQuery(contactData, null, null, null, null);
+                            if (c.moveToFirst()) {
+                                String id = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                                String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                                try {
+                                    if (hasPhone.equalsIgnoreCase("1")) {
+                                        Cursor phones = getContentResolver().query(
+                                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,
+                                                null, null);
+                                        phones.moveToFirst();
+                                        String cNumber = phones.getString(phones.getColumnIndex("data1"));
+                                        System.out.println("number is:" + cNumber);
+                                        Log.d("phone no: ", cNumber);
+                                        edtPhone.setText(cNumber);
+                                    }
+                                    String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+//                            txtname.setText("Name is: "+name);
+                                } catch (Exception ex) {
+                                    ex.getMessage();
+                                }
+                            }
+                        }
+                        break;
+
+                    //Comment
+                }
+            }
+
+            View.OnClickListener() {
+                @Override
+                public void onClick (View view){
+                    boolean checked = ((CheckBox) view).isChecked();
+                    if (checked) {
+
+                    } else if (checked) {
+
+                    }
+                }
+            }
+
+
+            @Override
+            protected void onDestroy () {
+                super.onDestroy();
+                Common.posFromDena = false;
+            }
 }

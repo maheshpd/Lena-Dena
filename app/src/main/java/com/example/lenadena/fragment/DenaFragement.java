@@ -4,6 +4,7 @@ package com.example.lenadena.fragment;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,12 +19,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lenadena.Abstract.DenaDataBase;
 import com.example.lenadena.Client.DenaDatabaseClient;
+import com.example.lenadena.Common;
 import com.example.lenadena.R;
+import com.example.lenadena.activity.AddDena;
 import com.example.lenadena.adapter.DenaAdapter;
 import com.example.lenadena.adapter.OnDenaItemClick;
 import com.example.lenadena.model.Dena;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,7 +37,7 @@ public class DenaFragement extends Fragment implements OnDenaItemClick {
     RecyclerView denaRv;
     LinearLayout givemoney;
     Context context;
-    List<Dena> denalist;
+
 
     DenaDataBase denaDataBase;
     DenaAdapter adapter;
@@ -80,7 +82,7 @@ public class DenaFragement extends Fragment implements OnDenaItemClick {
         givemoney = view.findViewById(R.id.no_give_money);
 
         denaRv.setLayoutManager(new LinearLayoutManager(getContext()));
-        denalist = new ArrayList<>();
+//        denalist = new ArrayList<>();
 
     }
 
@@ -99,11 +101,27 @@ public class DenaFragement extends Fragment implements OnDenaItemClick {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (i) {
                             case 0:
-                                DenaDatabaseClient.getInstance(getContext())
-                                        .getDenaDataBase()
-                                        .denaDao()
-                                        .delete(denalist.get(pos));
-                                denalist.remove(pos);
+
+                                AsyncTask.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        DenaDatabaseClient.getInstance(getContext())
+                                                .getDenaDataBase()
+                                                .denaDao()
+                                                .delete(Common.denalist.get(pos));
+                                        Common.denalist.remove(pos);
+                                    }
+                                });
+
+                            case 1:
+                                Intent intent = new Intent(context, AddDena.class);
+                                Common.position = pos;
+                                Common.posFromDena = true;
+                                startActivity(intent);
+
+
+
+
                         }
                     }
                 }).show();
@@ -114,11 +132,11 @@ public class DenaFragement extends Fragment implements OnDenaItemClick {
 
         @Override
         protected List<Dena> doInBackground(Void... voids) {
-            denalist = DenaDatabaseClient.getInstance(getContext())
+            Common.denalist = DenaDatabaseClient.getInstance(getContext())
                     .getDenaDataBase()
                     .denaDao()
                     .getAllDena();
-            return denalist;
+            return Common.denalist;
         }
 
         @Override
@@ -128,12 +146,13 @@ public class DenaFragement extends Fragment implements OnDenaItemClick {
             if (denas != null && denas.size() > 0) {
                 givemoney.setVisibility(View.GONE);
 
-                adapter = new DenaAdapter(getContext(), denalist, onDenaItemClick);
+                adapter = new DenaAdapter(getContext(), Common.denalist, onDenaItemClick);
                 denaRv.setHasFixedSize(true);
                 denaRv.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
         }
     }
+
 
 }
