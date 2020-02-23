@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.lenadena.Client.LenaDatabaseClient;
 import com.example.lenadena.R;
 import com.example.lenadena.model.Lena;
 
@@ -117,7 +116,7 @@ public class AddLena extends AppCompatActivity implements View.OnClickListener {
             lena.setPhone(sphone);
 
             //Add To Database
-            LenaDatabaseClient.getInstance(getApplicationContext()).getLenaDataBase().lenaDao().insert(lena);
+//            LenaDatabaseClient.getInstance(getApplicationContext()).getLenaDataBase().lenaDao().insert(lena);
 
 
             return null;

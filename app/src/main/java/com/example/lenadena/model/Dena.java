@@ -1,35 +1,25 @@
 package com.example.lenadena.model;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-import java.io.Serializable;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-@Entity
-public class Dena implements Serializable {
-    @PrimaryKey(autoGenerate = true)
+public class Dena extends RealmObject {
+    @PrimaryKey
     private int id;
 
-    @ColumnInfo(name = "name")
     private String name;
 
-    @ColumnInfo(name = "description")
     private String description;
 
-    @ColumnInfo(name = "time")
     private String time;
 
-    @ColumnInfo(name = "amount")
     private String amount;
 
-    @ColumnInfo(name = "phone")
     private String phone;
 
-    @ColumnInfo(name = "type")
     private String type;
 
-    @ColumnInfo(name = "createDate")
     private String createDate;
 
 

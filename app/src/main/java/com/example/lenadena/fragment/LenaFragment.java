@@ -1,11 +1,7 @@
 package com.example.lenadena.fragment;
 
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +9,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.lenadena.Client.LenaDatabaseClient;
-import com.example.lenadena.Common;
 import com.example.lenadena.R;
-import com.example.lenadena.activity.AddLena;
-import com.example.lenadena.adapter.LenaAdapter;
-import com.example.lenadena.adapter.OnDenaItemClick;
 import com.example.lenadena.model.Lena;
 
 import java.util.List;
@@ -29,7 +19,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LenaFragment extends Fragment implements OnDenaItemClick {
+public class LenaFragment extends Fragment {
 
     //widget
     RecyclerView lenaRV;
@@ -51,7 +41,7 @@ public class LenaFragment extends Fragment implements OnDenaItemClick {
         //initial
         initView(view);
 
-        new getDataValue().execute();
+//        new getDataValue().execute();
         return view;
 
     }
@@ -61,13 +51,13 @@ public class LenaFragment extends Fragment implements OnDenaItemClick {
         takemoney = view.findViewById(R.id.no_give_money);
     }
 
-    @Override
+   /* @Override
     public void onResume() {
         super.onResume();
         new getDataValue().execute();
     }
-
-    @Override
+*/
+   /* @Override
     public void onDenaItemClick(final int pos) {
         new AlertDialog.Builder(context)
                 .setTitle("Select Option")
@@ -95,9 +85,9 @@ public class LenaFragment extends Fragment implements OnDenaItemClick {
                         }
                     }
                 }).show();
-    }
+    }*/
 
-    class getDataValue extends AsyncTask<Void, Void, List<Lena>> {
+    /*class getDataValue extends AsyncTask<Void, Void, List<Lena>> {
 
         @Override
         protected List<Lena> doInBackground(Void... voids) {
@@ -121,5 +111,5 @@ public class LenaFragment extends Fragment implements OnDenaItemClick {
                 adapter.notifyDataSetChanged();
             }
         }
-    }
+    }*/
 }

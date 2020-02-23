@@ -1,6 +1,9 @@
 package com.example.lenadena.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
@@ -8,17 +11,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.lenadena.Common;
 import com.example.lenadena.R;
+import com.example.lenadena.activity.AddDena;
 import com.example.lenadena.model.Dena;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHolder> {
 
@@ -29,22 +38,24 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
     private OnDenaItemClick onDenaItemClick;
     private LayoutInflater layoutInflater;
 
-    public DenaAdapter(Context context, List<Dena> list, OnDenaItemClick onDenaItemClick) {
+    Realm realm;
+
+    public DenaAdapter(Context context, List<Dena> list) {
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.list = list;
-        this.onDenaItemClick = onDenaItemClick;
     }
 
     @NonNull
     @Override
     public MyDenaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.item, parent, false);
+        realm = Realm.getDefaultInstance();
         return new MyDenaViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyDenaViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyDenaViewHolder holder, final int position) {
         Dena dena = list.get(position);
         holder.type.setText(dena.getType());
         holder.name.setText(dena.getName());
@@ -64,6 +75,50 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
 
         countDownStart(holder, expireDateString);
 
+        Dena dena1 = list.get(position);
+        final int numPosition = dena1.getId();
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new AlertDialog.Builder(context)
+                        .setTitle("Select Options")
+                        .setItems(new String[]{"Delete", "Update"}, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                switch (i) {
+                                    case 0:
+
+                                        Delete(position);
+                                        break;
+                                    case 1:
+                                        Intent intent = new Intent(context, AddDena.class);
+                                        Common.position = numPosition;
+                                        Common.posFromDena = true;
+                                        context.startActivity(intent);
+
+
+                                        break;
+
+                                }
+                            }
+                        }).show();
+                Toast.makeText(context, "" + numPosition, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+    }
+
+    private void Delete(final int position) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Dena> rows = realm.where(Dena.class).equalTo("id", position).findAll();
+                rows.deleteAllFromRealm();
+                list.remove(position);
+            }
+        });
     }
 
 
@@ -112,7 +167,7 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
         return list.size();
     }
 
-    public class MyDenaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyDenaViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
 
         TextView type, dateRemaning, name, desc, phone, amt, firstChar;
 
@@ -126,13 +181,13 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
             phone = itemView.findViewById(R.id.phoneno);
             amt = itemView.findViewById(R.id.amt);
             firstChar = itemView.findViewById(R.id.firstChar);
-            itemView.setOnClickListener(this);
+//            itemView.setOnClickListener(this);
         }
 
-        @Override
+       /* @Override
         public void onClick(View view) {
             onDenaItemClick.onDenaItemClick(getAdapterPosition());
-        }
+        }*/
     }
 
 
