@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,7 +34,6 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
     private List<Dena> list;
     private Handler handler;
     private Runnable runnable;
-    private OnDenaItemClick onDenaItemClick;
     private LayoutInflater layoutInflater;
 
     Realm realm;
@@ -96,14 +94,11 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
                                         Common.position = numPosition;
                                         Common.posFromDena = true;
                                         context.startActivity(intent);
-
-
                                         break;
 
                                 }
                             }
                         }).show();
-                Toast.makeText(context, "" + numPosition, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -181,43 +176,7 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
             phone = itemView.findViewById(R.id.phoneno);
             amt = itemView.findViewById(R.id.amt);
             firstChar = itemView.findViewById(R.id.firstChar);
-//            itemView.setOnClickListener(this);
         }
-
-       /* @Override
-        public void onClick(View view) {
-            onDenaItemClick.onDenaItemClick(getAdapterPosition());
-        }*/
     }
-
-
-//    public int getCountOfDays(String createdDateString, String expireDateString) {
-//
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//
-//        Date createdConvertedDate = null;
-//        Date expireCovertedDate = null;
-//        try {
-//            createdConvertedDate = dateFormat.parse(createdDateString);
-//            expireCovertedDate = dateFormat.parse(expireDateString);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        Calendar start = new GregorianCalendar();
-//        start.setTime(createdConvertedDate);
-//
-//        Calendar end = new GregorianCalendar();
-//        end.setTime(expireCovertedDate);
-//
-//        long diff = end.getTimeInMillis() - start.getTimeInMillis();
-//
-//        float dayCount = (float) diff / (24 * 60 * 60 * 1000);
-//
-//
-//        return (int) (dayCount);
-//    }
-
 
 }

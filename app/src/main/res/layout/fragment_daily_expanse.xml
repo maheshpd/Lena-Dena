@@ -7,19 +7,12 @@
     tools:context=".fragment.DailyExpanseFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sectionRv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <devs.mulham.horizontalcalendar.HorizontalCalendarView
-        android:id="@+id/calanderView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:textColorSelected="#FFF" />
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

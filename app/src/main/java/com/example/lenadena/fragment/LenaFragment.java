@@ -9,12 +9,18 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lenadena.R;
+import com.example.lenadena.adapter.LenaAdapter;
+import com.example.lenadena.helper.MyLenaHelper;
 import com.example.lenadena.model.Lena;
 
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +32,14 @@ public class LenaFragment extends Fragment {
     LinearLayout takemoney;
     Context context;
     List<Lena> lenalist;
+
+    Realm realm;
+
+    LenaAdapter adapter;
+
+    MyLenaHelper helper;
+    RealmChangeListener realmChangeListener;
+
     public LenaFragment() {
         // Required empty public constructor
     }
@@ -38,6 +52,10 @@ public class LenaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_lena, container, false);
         context = view.getContext();
 
+        realm = Realm.getDefaultInstance();
+        helper = new MyLenaHelper(realm);
+        helper.selectFromDB();
+
         //initial
         initView(view);
 
@@ -48,68 +66,34 @@ public class LenaFragment extends Fragment {
 
     private void initView(View view) {
         lenaRV = view.findViewById(R.id.lenaRv);
-        takemoney = view.findViewById(R.id.no_give_money);
-    }
+        takemoney = view.findViewById(R.id.no_take_money);
 
-   /* @Override
-    public void onResume() {
-        super.onResume();
-        new getDataValue().execute();
-    }
-*/
-   /* @Override
-    public void onDenaItemClick(final int pos) {
-        new AlertDialog.Builder(context)
-                .setTitle("Select Option")
-                .setItems(new String[]{"Delete", "Update"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        switch (i) {
-                            case 0:
-                                AsyncTask.execute(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        LenaDatabaseClient.getInstance(getContext())
-                                                .getLenaDataBase()
-                                                .lenaDao()
-                                                .delete(lenalist.get(pos));
-                                        lenalist.remove(pos);
-                                    }
-                                });
+        if (helper.justRefresh() != null && helper.justRefresh().size() > 0) {
+            takemoney.setVisibility(View.GONE);
 
-                            case 1:
-                                Intent intent = new Intent(context, AddLena.class);
-                                intent.putExtra("id", pos);
-                                Common.posFromDena = true;
-                                startActivity(intent);
-                        }
-                    }
-                }).show();
-    }*/
-
-    /*class getDataValue extends AsyncTask<Void, Void, List<Lena>> {
-
-        @Override
-        protected List<Lena> doInBackground(Void... voids) {
-            lenalist = LenaDatabaseClient.getInstance(getContext())
-                    .getLenaDataBase()
-                    .lenaDao()
-                    .getAllLena();
-            return lenalist;
+            adapter = new LenaAdapter(getContext(), helper.justRefresh());
+            lenaRV.setLayoutManager(new LinearLayoutManager(getContext()));
+            lenaRV.setHasFixedSize(true);
+            lenaRV.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
+        refresh();
+    }
 
-        @Override
-        protected void onPostExecute(List<Lena> lenas) {
-            super.onPostExecute(lenas);
-
-            if (lenas != null && lenas.size() > 0) {
-                takemoney.setVisibility(View.GONE);
-                LenaAdapter adapter = new LenaAdapter(getContext(), lenas);
-                lenaRV.setLayoutManager(new LinearLayoutManager(getContext()));
+    private void refresh() {
+        realmChangeListener = new RealmChangeListener() {
+            @Override
+            public void onChange(Object o) {
+                adapter = new LenaAdapter(getContext(), helper.justRefresh());
                 lenaRV.setAdapter(adapter);
-                lenaRV.setHasFixedSize(true);
-                adapter.notifyDataSetChanged();
             }
-        }
-    }*/
+        };
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        realm.removeChangeListener(realmChangeListener);
+        realm.close();
+    }
 }

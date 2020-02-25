@@ -87,14 +87,6 @@ public class AddDena extends AppCompatActivity implements View.OnClickListener {
         }
 
     }
-
-    /*dena.setName(sname);
-                    dena.setDescription(sdesc);
-                    dena.setAmount(samt);
-                    dena.setType("Dena");
-                    dena.setTime(stime);
-                    dena.setCreateDate(screateDate);
-                    dena.setPhone(sphone);*/
     private void update() {
         realm.beginTransaction();
         dena.setName(edtName.getText().toString().trim());
@@ -252,91 +244,4 @@ public class AddDena extends AppCompatActivity implements View.OnClickListener {
             }
         });
     }
-
-   /* class saveDena extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-
-            Dena dena = new Dena();
-            dena.setName(sname);
-            dena.setDescription(sdesc);
-            dena.setAmount(samt);
-            dena.setType("Dena");
-            dena.setTime(stime);
-            dena.setCreateDate(screateDate);
-            dena.setPhone(sphone);
-
-            //Add To Database
-            DenaDatabaseClient.getInstance(getApplicationContext()).getDenaDataBase().denaDao().insert(dena);
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            add_dena_date_btn.setEnabled(true);
-            finish();
-            super.onPostExecute(aVoid);
-
-        }
-    }*/
-
-   /* public void onActivityResult(int reqCode, int resultCode, Intent data) {
-        super.onActivityResult(reqCode, resultCode, data);
-        switch (reqCode) {
-            case (PICK_CONTACT):
-                if (resultCode == Activity.RESULT_OK) {
-                    Uri contactData = data.getData();
-                    Cursor c = managedQuery(contactData, null, null, null, null);
-                    if (c.moveToFirst()) {
-                        String id = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
-                        String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-                        try {
-                            if (hasPhone.equalsIgnoreCase("1")) {
-                                Cursor phones = getContentResolver().query(
-                                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,
-                                        null, null);
-                                phones.moveToFirst();
-                                String cNumber = phones.getString(phones.getColumnIndex("data1"));
-                                System.out.println("number is:" + cNumber);
-                                Log.d("phone no: ", cNumber);
-                                edtPhone.setText(cNumber);
-                            }
-                            String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-//                            txtname.setText("Name is: "+name);
-                        } catch (Exception ex) {
-                            ex.getMessage();
-                        }
-                    }
-                }
-                break;
-
-            //Comment
-        }
-    }
-
-            View.OnClickListener()
-
-    {
-        @Override
-        public void onClick (View view){
-        boolean checked = ((CheckBox) view).isChecked();
-        if (checked) {
-
-        } else if (checked) {
-
-        }
-    }
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Common.posFromDena = false;
-    }*/
 }

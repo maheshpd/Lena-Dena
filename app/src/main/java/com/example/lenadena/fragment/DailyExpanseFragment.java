@@ -1,28 +1,30 @@
 package com.example.lenadena.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lenadena.R;
+import com.example.lenadena.adapter.SectionRecyclerViewAdapter;
+import com.example.lenadena.model.ItemModel;
+import com.example.lenadena.model.SectionModel;
 
-import java.util.Calendar;
-
-import devs.mulham.horizontalcalendar.HorizontalCalendar;
-import devs.mulham.horizontalcalendar.HorizontalCalendarView;
-import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DailyExpanseFragment extends Fragment {
 
-    //Widget
-    HorizontalCalendarView horizontalCalendarView;
+    RecyclerView sectionRv;
+    Context context;
 
     public DailyExpanseFragment() {
         // Required empty public constructor
@@ -36,33 +38,43 @@ public class DailyExpanseFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_daily_expanse, container, false);
 
         init(view);
-
+        context = view.getContext();
+//        context.getApplicationContext();
 
         return view;
     }
 
     private void init(View view) {
 
-        //CAlendar
-        Calendar startDate = Calendar.getInstance();
-        startDate.add(Calendar.MONTH, 0);
+        sectionRv = view.findViewById(R.id.sectionRv);
+        populateRecyclerView();
+        sectionRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        sectionRv.setHasFixedSize(true);
+        sectionRv.setNestedScrollingEnabled(true);
 
-        Calendar endDate = Calendar.getInstance();
-        endDate.add(Calendar.YEAR, 0); //2 day left
-
-        horizontalCalendarView = view.findViewById(R.id.calanderView);
-        HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(view, R.id.calanderView)
-                .range(startDate, endDate)
-                .datesNumberOnScreen(7)
-                .mode(HorizontalCalendar.Mode.DAYS)
-                .defaultSelectedDate(startDate)
-                .build();
-        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
-            @Override
-            public void onDateSelected(Calendar date, int position) {
-
-            }
-        });
     }
+
+    //populate recycler view
+    private void populateRecyclerView() {
+        ArrayList<SectionModel> sectionModelArrayList = new ArrayList<>();
+        //for loop for sections
+        for (int i = 1; i <= 5; i++) {
+            ArrayList<ItemModel> itemArrayList = new ArrayList<>();
+            //for loop for items
+            for (int j = 1; j <= 10; j++) {
+//                itemArrayList.add("Item","1234");
+//                itemArrayList.add(new SectionModel("25/02/2020", "20",itemArrayList));
+                itemArrayList.add(new ItemModel("Hii", "20"));
+            }
+
+            //add the section and items to array list
+            sectionModelArrayList.add(new SectionModel("25/02/2020", "20", itemArrayList));
+        }
+
+        SectionRecyclerViewAdapter adapter = new SectionRecyclerViewAdapter(context, sectionModelArrayList);
+        sectionRv.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
 
 }
