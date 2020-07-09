@@ -1,13 +1,14 @@
 package com.example.lenadena.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SectionModel {
     public String date;
     public String totalPrice;
-    public ArrayList<ItemModel> itemModelArrayList;
+    public List<ItemModel> itemModelArrayList;
 
-    public SectionModel(String date, String totalPrice, ArrayList<ItemModel> itemModelArrayList) {
+    public SectionModel(String date, String totalPrice, List<ItemModel> itemModelArrayList) {
         this.date = date;
         this.totalPrice = totalPrice;
         this.itemModelArrayList = itemModelArrayList;
@@ -29,11 +30,11 @@ public class SectionModel {
         this.totalPrice = totalPrice;
     }
 
-    public ArrayList<ItemModel> getItemModelArrayList() {
+    public List<ItemModel> getItemModelArrayList() {
         return itemModelArrayList;
     }
 
-    public void setItemModelArrayList(ArrayList<ItemModel> itemModelArrayList) {
+    public void setItemModelArrayList(List<ItemModel> itemModelArrayList) {
         this.itemModelArrayList = itemModelArrayList;
     }
 }

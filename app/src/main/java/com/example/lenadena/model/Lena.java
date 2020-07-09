@@ -1,11 +1,13 @@
 package com.example.lenadena.model;
 
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-public class Lena extends RealmObject {
-    @PrimaryKey
+@Entity
+public class Lena {
+
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     private String name;

@@ -24,4 +24,12 @@ public class ItemModel {
     public void setPrice(String price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "ItemModel{" +
+                "description='" + description + '\'' +
+                ", price='" + price + '\'' +
+                '}';
+    }
 }

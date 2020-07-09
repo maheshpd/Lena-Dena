@@ -2,6 +2,7 @@ package com.example.lenadena.fragment;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lenadena.R;
 import com.example.lenadena.adapter.DenaAdapter;
-import com.example.lenadena.adapter.OnDenaItemClick;
-import com.example.lenadena.helper.MyDenaHelper;
+import com.example.lenadena.client.DatabaseClient;
+import com.example.lenadena.model.Dena;
 
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,16 +29,8 @@ public class DenaFragement extends Fragment {
     RecyclerView denaRv;
     LinearLayout givemoney;
     Context context;
-
-    Realm realm;
-
-    //    DenaDataBase denaDataBase;
     DenaAdapter adapter;
 
-    MyDenaHelper helper;
-    RealmChangeListener realmChangeListener;
-
-    OnDenaItemClick onDenaItemClick;
     public DenaFragement() {
         // Required empty public constructor
     }
@@ -49,46 +41,34 @@ public class DenaFragement extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dena_fragement, container, false);
         context = view.getContext();
-
-        realm = Realm.getDefaultInstance();
-        helper = new MyDenaHelper(realm);
-        helper.selectFromDB();
-
         initializeWidget(view);
+        new getDenaTask().execute();
         return view;
     }
 
     private void initializeWidget(View view) {
         denaRv = view.findViewById(R.id.denaRv);
         givemoney = view.findViewById(R.id.no_give_money);
+    }
 
-        if (helper.justRefresh() != null && helper.justRefresh().size() > 0) {
-            givemoney.setVisibility(View.GONE);
+    class getDenaTask extends AsyncTask<Void, Void, List<Dena>> {
+        @Override
+        protected List<Dena> doInBackground(Void... voids) {
+            List<Dena> denaList = DatabaseClient.getInstance(context)
+                    .getLenaRoomDatabase()
+                    .denaDao()
+                    .getAllData();
+            return denaList;
+        }
 
-            adapter = new DenaAdapter(getContext(), helper.justRefresh());
+        @Override
+        protected void onPostExecute(List<Dena> denas) {
+            super.onPostExecute(denas);
+            adapter = new DenaAdapter(getContext(), denas);
             denaRv.setLayoutManager(new LinearLayoutManager(getContext()));
             denaRv.setHasFixedSize(true);
             denaRv.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }
-
-        refresh();
-    }
-
-    private void refresh() {
-        realmChangeListener = new RealmChangeListener() {
-            @Override
-            public void onChange(Object o) {
-                adapter = new DenaAdapter(getContext(), helper.justRefresh());
-                denaRv.setAdapter(adapter);
-            }
-        };
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        realm.removeChangeListener(realmChangeListener);
-        realm.close();
     }
 }

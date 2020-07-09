@@ -106,14 +106,14 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
     }
 
     private void Delete(final int position) {
-        realm.executeTransaction(new Realm.Transaction() {
+        /*realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmResults<Dena> rows = realm.where(Dena.class).equalTo("id", position).findAll();
                 rows.deleteAllFromRealm();
                 list.remove(position);
             }
-        });
+        });*/
     }
 
 
@@ -139,6 +139,7 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
                         diff -= minutes * (60 * 1000);
                         long seconds = diff / 1000;
                         holder.dateRemaning.setText("" + String.format("%02d", days) + " Day Left " + String.format("%02d", hours) + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+//                        holder.dateRemaning.setText("" + String.format("%02d", days) + " Day Left ");
 //                        txtTimerHour.setText("" + String.format("%02d", hours));
 //                        txtTimerMinute.setText(""
 //                                + String.format("%02d", minutes));
@@ -146,7 +147,7 @@ public class DenaAdapter extends RecyclerView.Adapter<DenaAdapter.MyDenaViewHold
 //                                + String.format("%02d", seconds));
                     } else {
                         holder.dateRemaning.setText("Time Over");
-                        holder.dateRemaning.setTextColor(R.color.red);
+//                        holder.dateRemaning.setTextColor(R.color.red);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

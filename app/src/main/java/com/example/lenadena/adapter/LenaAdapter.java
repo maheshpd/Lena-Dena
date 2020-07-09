@@ -102,14 +102,14 @@ public class LenaAdapter extends RecyclerView.Adapter<LenaAdapter.MyDenaViewHold
     }
 
     private void Delete(final int position) {
-        realm.executeTransaction(new Realm.Transaction() {
+       /* realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmResults<Lena> row = realm.where(Lena.class).equalTo("id", position).findAll();
                 row.deleteAllFromRealm();
                 list.remove(position);
             }
-        });
+        });*/
     }
 
     private void countDownStart(final MyDenaViewHolder holder, final String expiredate) {
@@ -133,7 +133,8 @@ public class LenaAdapter extends RecyclerView.Adapter<LenaAdapter.MyDenaViewHold
                         long minutes = diff / (60 * 1000);
                         diff -= minutes * (60 * 1000);
                         long seconds = diff / 1000;
-                        holder.dateRemaning.setText("" + String.format("%02d", days) + " Day Left " + String.format("%02d", hours) + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+//                        holder.dateRemaning.setText("" + String.format("%02d", days) + " Day Left " + String.format("%02d", hours) + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                        holder.dateRemaning.setText("" + String.format("%02d", days) + " Day Left ");
 //                        txtTimerHour.setText("" + String.format("%02d", hours));
 //                        txtTimerMinute.setText(""
 //                                + String.format("%02d", minutes));

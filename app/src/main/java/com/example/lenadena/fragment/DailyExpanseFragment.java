@@ -2,7 +2,9 @@ package com.example.lenadena.fragment;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +15,30 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lenadena.R;
 import com.example.lenadena.adapter.SectionRecyclerViewAdapter;
-import com.example.lenadena.model.ItemModel;
+import com.example.lenadena.client.DatabaseClient;
+import com.example.lenadena.model.Daily;
 import com.example.lenadena.model.SectionModel;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DailyExpanseFragment extends Fragment {
+    private static final String TAG = "DailyExpanseFragment";
 
     RecyclerView sectionRv;
     Context context;
+    RealmQuery<Daily> query;
+    RealmResults<Daily> result1;
+    RealmResults<Daily> results;
+    SectionRecyclerViewAdapter adapter;
+    String date;
 
     public DailyExpanseFragment() {
         // Required empty public constructor
@@ -36,45 +50,43 @@ public class DailyExpanseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_daily_expanse, container, false);
-
-        init(view);
         context = view.getContext();
-//        context.getApplicationContext();
-
+        init(view);
+        new getDailyTask().execute();
         return view;
     }
 
     private void init(View view) {
-
         sectionRv = view.findViewById(R.id.sectionRv);
-        populateRecyclerView();
         sectionRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         sectionRv.setHasFixedSize(true);
         sectionRv.setNestedScrollingEnabled(true);
-
     }
 
-    //populate recycler view
-    private void populateRecyclerView() {
-        ArrayList<SectionModel> sectionModelArrayList = new ArrayList<>();
-        //for loop for sections
-        for (int i = 1; i <= 5; i++) {
-            ArrayList<ItemModel> itemArrayList = new ArrayList<>();
-            //for loop for items
-            for (int j = 1; j <= 10; j++) {
-//                itemArrayList.add("Item","1234");
-//                itemArrayList.add(new SectionModel("25/02/2020", "20",itemArrayList));
-                itemArrayList.add(new ItemModel("Hii", "20"));
-            }
+    class getDailyTask extends AsyncTask<Void,Void, List<Daily>> {
 
-            //add the section and items to array list
-            sectionModelArrayList.add(new SectionModel("25/02/2020", "20", itemArrayList));
+        @Override
+        protected List<Daily> doInBackground(Void... voids) {
+            List<Daily> dailyList = DatabaseClient.getInstance(context)
+                    .getLenaRoomDatabase()
+                    .daliyDao()
+                    .getAllData();
+            return dailyList;
         }
 
-        SectionRecyclerViewAdapter adapter = new SectionRecyclerViewAdapter(context, sectionModelArrayList);
-        sectionRv.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
+        @Override
+        protected void onPostExecute(List<Daily> sectionModels) {
+            super.onPostExecute(sectionModels);
 
+
+
+            adapter = new SectionRecyclerViewAdapter(getContext(),sectionModels);
+            sectionRv.setLayoutManager(new LinearLayoutManager(getContext()));
+            sectionRv.setHasFixedSize(true);
+            sectionRv.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+        }
+    }
 
 }

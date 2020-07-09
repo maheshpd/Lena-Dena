@@ -3,6 +3,7 @@ package com.example.lenadena.activity;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lenadena.Common;
 import com.example.lenadena.R;
+import com.example.lenadena.client.DatabaseClient;
 import com.example.lenadena.model.Lena;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -25,6 +27,8 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -62,7 +66,7 @@ public class AddLena extends AppCompatActivity implements View.OnClickListener {
 
         if (Common.posFromLena == true) {
             final int pos = Common.position;
-            lena = realm.where(Lena.class).equalTo("id", pos).findFirst();
+//            lena = realm.where(Lena.class).equalTo("id", pos).findFirst();
 
             edtName.setText(lena.getName());
             edtDesc.setText(lena.getDescription());
@@ -194,20 +198,17 @@ public class AddLena extends AppCompatActivity implements View.OnClickListener {
             } else if (TextUtils.isEmpty(samt)) {
                 Toast.makeText(this, "Enter amount", Toast.LENGTH_SHORT).show();
             } else {
-                saveDena();
+                new LenaTask().execute();
             }
 
         }
     }
 
-    private void saveDena() {
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                Number maxId = realm.where(Lena.class).max("id");
-                int newKey = (maxId == null) ? 1 : maxId.intValue() + 1;
+    class LenaTask extends AsyncTask<Void, Void, Void> {
 
-                Lena lena = realm.createObject(Lena.class, newKey);
+        @Override
+        protected Void doInBackground(Void... voids) {
+                Lena lena = new Lena();
                 lena.setName(sname);
                 lena.setDescription(sdesc);
                 lena.setAmount(samt);
@@ -215,19 +216,19 @@ public class AddLena extends AppCompatActivity implements View.OnClickListener {
                 lena.setTime(stime);
                 lena.setCreateDate(screateDate);
                 lena.setPhone(sphone);
-            }
-        }, new Realm.Transaction.OnSuccess() {
 
-            @Override
-            public void onSuccess() {
-                startActivity(new Intent(AddLena.this, MainActivity.class));
-                finish();
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                Toast.makeText(AddLena.this, "Fail", Toast.LENGTH_SHORT).show();
-            }
-        });
+            DatabaseClient.getInstance(getApplicationContext()).getLenaRoomDatabase()
+                    .lenaDao().insert(lena);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Toast.makeText(AddLena.this, "Data Added", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            finish();
+        }
     }
+
 }

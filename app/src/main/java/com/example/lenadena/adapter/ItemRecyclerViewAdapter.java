@@ -10,16 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lenadena.R;
+import com.example.lenadena.model.Daily;
 import com.example.lenadena.model.ItemModel;
+import com.example.lenadena.model.SectionModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerViewAdapter.ItemViewHolder> {
 
     Context context;
-    ArrayList<ItemModel> itemModelArrayList;
+    List<SectionModel> itemModelArrayList;
 
-    public ItemRecyclerViewAdapter(Context context, ArrayList<ItemModel> itemModelArrayList) {
+    public ItemRecyclerViewAdapter(Context context, List<SectionModel> itemModelArrayList) {
         this.context = context;
         this.itemModelArrayList = itemModelArrayList;
     }
@@ -33,9 +36,15 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        ItemModel itemModel = itemModelArrayList.get(position);
-        holder.descTxt.setText(itemModel.getDescription());
-        holder.amount.setText("Rs." + itemModel.getPrice());
+        SectionModel daily = itemModelArrayList.get(position);
+
+        String name = daily.date;
+
+        /*holder.descTxt.setText(daily.getDescription());
+
+
+
+        holder.amount.setText("Rs." + daily.getAmount());*/
     }
 
     @Override

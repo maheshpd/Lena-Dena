@@ -11,16 +11,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lenadena.R;
+import com.example.lenadena.model.Daily;
+import com.example.lenadena.model.ItemModel;
 import com.example.lenadena.model.SectionModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecyclerViewAdapter.SectionViewHolder> {
 
     Context context;
-    ArrayList<SectionModel> sectionModelArrayList;
-
-    public SectionRecyclerViewAdapter(Context context, ArrayList<SectionModel> sectionModelArrayList) {
+    List<Daily> sectionModelArrayList;
+    List<SectionModel> sectionModelList = new ArrayList<>();
+    public SectionRecyclerViewAdapter(Context context, List<Daily> sectionModelArrayList) {
         this.context = context;
         this.sectionModelArrayList = sectionModelArrayList;
     }
@@ -34,11 +37,23 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
 
     @Override
     public void onBindViewHolder(@NonNull SectionViewHolder holder, int position) {
-        SectionModel sm = sectionModelArrayList.get(position);
-        holder.dateTxt.setText(sm.getDate());
-        holder.totalAmtTxt.setText("Total:-" + sm.getTotalPrice() + "Rs.");
+        Daily sm = sectionModelArrayList.get(position);
+        String sectionOneName = null;
+        ArrayList<ItemModel> sectionList = new ArrayList<>();
+        for (int i = 0; i <sectionModelArrayList.size()  ; i++) {
+            String amount = sectionModelArrayList.get(i).getAmount();
+            String description = sectionModelArrayList.get(i).getDescription();
+            sectionOneName = sectionModelArrayList.get(i).getCreateDate();
+            sectionList.add(new ItemModel(description,amount));
+        }
 
-        ItemRecyclerViewAdapter adapter = new ItemRecyclerViewAdapter(context, sm.getItemModelArrayList());
+        sectionModelList.add(new SectionModel(sectionOneName,"",sectionList));
+
+
+//        holder.dateTxt.setText(sm.getDate());
+//        holder.totalAmtTxt.setText("Total:-" + sm.getTotalPrice() + "Rs.");
+
+        ItemRecyclerViewAdapter adapter = new ItemRecyclerViewAdapter(context, sectionModelList);
         holder.itemRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         holder.itemRecyclerView.setHasFixedSize(true);
         holder.itemRecyclerView.setNestedScrollingEnabled(true);
@@ -61,7 +76,6 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
             dateTxt = itemView.findViewById(R.id.date);
             totalAmtTxt = itemView.findViewById(R.id.totalAmount);
             itemRecyclerView = itemView.findViewById(R.id.itemRv);
-
         }
     }
 }

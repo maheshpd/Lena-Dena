@@ -2,6 +2,7 @@ package com.example.lenadena.fragment;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lenadena.R;
 import com.example.lenadena.adapter.LenaAdapter;
-import com.example.lenadena.helper.MyLenaHelper;
+import com.example.lenadena.client.DatabaseClient;
+
 import com.example.lenadena.model.Lena;
 
 import java.util.List;
@@ -31,14 +33,7 @@ public class LenaFragment extends Fragment {
     RecyclerView lenaRV;
     LinearLayout takemoney;
     Context context;
-    List<Lena> lenalist;
-
-    Realm realm;
-
     LenaAdapter adapter;
-
-    MyLenaHelper helper;
-    RealmChangeListener realmChangeListener;
 
     public LenaFragment() {
         // Required empty public constructor
@@ -52,14 +47,9 @@ public class LenaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_lena, container, false);
         context = view.getContext();
 
-        realm = Realm.getDefaultInstance();
-        helper = new MyLenaHelper(realm);
-        helper.selectFromDB();
-
         //initial
         initView(view);
-
-//        new getDataValue().execute();
+        new getLenaTask().execute();
         return view;
 
     }
@@ -67,33 +57,28 @@ public class LenaFragment extends Fragment {
     private void initView(View view) {
         lenaRV = view.findViewById(R.id.lenaRv);
         takemoney = view.findViewById(R.id.no_take_money);
+    }
 
-        if (helper.justRefresh() != null && helper.justRefresh().size() > 0) {
-            takemoney.setVisibility(View.GONE);
+    class getLenaTask extends AsyncTask<Void, Void, List<Lena>> {
+        @Override
+        protected List<Lena> doInBackground(Void... voids) {
+            List<Lena> lenaList = DatabaseClient.getInstance(context)
+                    .getLenaRoomDatabase()
+                    .lenaDao()
+                    .getAllData();
+            return lenaList;
+        }
 
-            adapter = new LenaAdapter(getContext(), helper.justRefresh());
+        @Override
+        protected void onPostExecute(List<Lena> lenas) {
+            super.onPostExecute(lenas);
+
+            adapter = new LenaAdapter(getContext(), lenas);
             lenaRV.setLayoutManager(new LinearLayoutManager(getContext()));
             lenaRV.setHasFixedSize(true);
             lenaRV.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }
-        refresh();
     }
 
-    private void refresh() {
-        realmChangeListener = new RealmChangeListener() {
-            @Override
-            public void onChange(Object o) {
-                adapter = new LenaAdapter(getContext(), helper.justRefresh());
-                lenaRV.setAdapter(adapter);
-            }
-        };
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        realm.removeChangeListener(realmChangeListener);
-        realm.close();
-    }
 }
