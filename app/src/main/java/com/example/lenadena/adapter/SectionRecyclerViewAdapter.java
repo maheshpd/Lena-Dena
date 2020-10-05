@@ -23,9 +23,9 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
     Context context;
     List<Daily> sectionModelArrayList;
     List<SectionModel> sectionModelList = new ArrayList<>();
-    public SectionRecyclerViewAdapter(Context context, List<Daily> sectionModelArrayList) {
+    public SectionRecyclerViewAdapter(Context context, List<SectionModel> sectionModelList) {
         this.context = context;
-        this.sectionModelArrayList = sectionModelArrayList;
+        this.sectionModelList = sectionModelList;
     }
 
     @NonNull
@@ -41,13 +41,20 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
         String sectionOneName = null;
         ArrayList<ItemModel> sectionList = new ArrayList<>();
         for (int i = 0; i <sectionModelArrayList.size()  ; i++) {
-            String amount = sectionModelArrayList.get(i).getAmount();
-            String description = sectionModelArrayList.get(i).getDescription();
+
             sectionOneName = sectionModelArrayList.get(i).getCreateDate();
-            sectionList.add(new ItemModel(description,amount));
+
+            if (sectionOneName.equals(sectionModelArrayList.get(i).getCreateDate())) {
+                String amount = sectionModelArrayList.get(i).getAmount();
+                String description = sectionModelArrayList.get(i).getDescription();
+
+                sectionList.add(new ItemModel(description, amount));
+            }
+
+
         }
 
-        sectionModelList.add(new SectionModel(sectionOneName,"",sectionList));
+        sectionModelList.add(new SectionModel(sectionOneName, "", sectionList));
 
 
 //        holder.dateTxt.setText(sm.getDate());

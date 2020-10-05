@@ -4,7 +4,6 @@ package com.example.lenadena.fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +20,6 @@ import com.example.lenadena.model.SectionModel;
 
 import java.util.List;
 
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
@@ -63,24 +60,28 @@ public class DailyExpanseFragment extends Fragment {
         sectionRv.setNestedScrollingEnabled(true);
     }
 
-    class getDailyTask extends AsyncTask<Void,Void, List<Daily>> {
+    class getDailyTask extends AsyncTask<Void, Void, List<SectionModel>> {
 
         @Override
-        protected List<Daily> doInBackground(Void... voids) {
-            List<Daily> dailyList = DatabaseClient.getInstance(context)
+        protected List<SectionModel> doInBackground(Void... voids) {
+            List<SectionModel> dailyList = DatabaseClient.getInstance(context)
                     .getLenaRoomDatabase()
                     .daliyDao()
-                    .getAllData();
+//                    .getCreateDate();
+                    .getCreateDate();
+
             return dailyList;
         }
 
         @Override
-        protected void onPostExecute(List<Daily> sectionModels) {
+        protected void onPostExecute(List<SectionModel> sectionModels) {
             super.onPostExecute(sectionModels);
+            String createDate;
+            for (int i = 0; i < sectionModels.size(); i++) {
+                createDate = sectionModels.get(i).getDate();
+            }
 
-
-
-            adapter = new SectionRecyclerViewAdapter(getContext(),sectionModels);
+            adapter = new SectionRecyclerViewAdapter(getContext(), sectionModels);
             sectionRv.setLayoutManager(new LinearLayoutManager(getContext()));
             sectionRv.setHasFixedSize(true);
             sectionRv.setAdapter(adapter);

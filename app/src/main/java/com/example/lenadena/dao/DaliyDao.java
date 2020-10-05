@@ -7,7 +7,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.lenadena.model.Daily;
-import com.example.lenadena.model.Dena;
+import com.example.lenadena.model.SectionModel;
 
 import java.util.List;
 
@@ -25,4 +25,7 @@ public interface DaliyDao {
 
     @Update
     void update(Daily daily);
+
+    @Query("SELECT DISTINCT createDate FROM Daily")
+    List<SectionModel> getCreateDate();
 }
